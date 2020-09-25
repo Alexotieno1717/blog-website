@@ -6,6 +6,7 @@ class Config:
     General configuration parent class
     """
     SECRET_KEY = 'alexotieno900'
+    # SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class ProdConfig(Config):
