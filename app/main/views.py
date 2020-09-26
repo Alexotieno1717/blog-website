@@ -1,14 +1,16 @@
 from flask import render_template, request, redirect, url_for, abort, flash
 from . import main
 from flask_login import login_required, current_user
-from ..models import User, Post
-from .forms import UpdateProfile, PostForm
+from ..models import User, Post, Comment
+from .forms import UpdateProfile, PostForm, CommentForm
 from .. import db, photos
+from ..request import get_quotes
 
 
 @main.route('/')
 def index():
-    return render_template('index.html')
+    quote = get_quotes()
+    return render_template('index.html', quote = quote)
 
 
 @main.route('/user/<uname>')
@@ -87,7 +89,13 @@ def all():
 @login_required
 def view(id):
     post = Post.query.get_or_404(id)
-    return render_template('view.html', post=post)
+    post_comments = Comment.query.filter_by(post_id=id).all()
+    comment_form = CommentForm()
+    if comment_form.validate_on_submit():
+        new_comment = Comment(post_id=id, comment=comment_form.comment.data, author=current_user)
+        new_comment.save_comment()
+
+    return render_template('view.html', post=post, post_comments=post_comments, comment_form=comment_form)
 
 
 @main.route('/delete/<int:id>', methods=['GET', 'POST'])
@@ -99,5 +107,35 @@ def delete(id):
     db.session.delete(post)
     db.session.commit()
 
-    flash('Your post has been deleted')
+    flash('Your post has been deleted', 'successfully')
     return redirect(url_for('main.all'))
+
+
+@main.route('/Update/<int:id>', methods=['GET', 'POST'])
+@login_required
+def update_post(id):
+    post = Post.query.get_or_404(id)
+    if post.author != current_user:
+        abort(403)
+    form = PostForm()
+    if form.validate_on_submit():
+        post.post_title = form.post_title.data
+        post.description = form.description.data
+        db.session.commit()
+        flash('Your post has been Updated', 'successfully')
+        return redirect(url_for('main.all'))
+    elif request.method == 'GET':
+        form.post_title.data = post.post_title
+        form.description.data = post.description
+    return render_template('update_post.html', form=form)
+
+
+# @main.route('/comment/<int:id>', methods=['GET', 'POST'])
+# @login_required
+# def comment(id):
+#     comment_form = CommentForm()
+#     if comment_form.validate_on_submit():
+#         new_comment = Comment(post_id=id, comment=comment.form.data, author=current_user)
+#         new_comment.save_comment()
+#
+#     return render_template('view.html', comment_form=comment_form)

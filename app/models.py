@@ -19,6 +19,7 @@ class User(UserMixin, db.Model):
     profile_pic_path = db.Column(db.String())
     pass_secure = db.Column(db.String(255))
     posts = db.relationship('Post', backref='author', lazy=True)
+    comments = db.relationship('Comment', backref='author', lazy=True)
 
     @property
     def password(self):
@@ -45,6 +46,8 @@ class Post(db.Model):
     description = db.Column(db.String(255), index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
+    # comments = db.relationship('Comment', backref='author', lazy=True)
+
     def save_post(self):
         db.session.add(self)
         db.session.commit()
@@ -70,6 +73,7 @@ class Comment(db.Model):
     comment = db.Column(db.Text())
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    date = db.Column(db.DateTime, default=datetime.utcnow)
 
     def save_comment(self):
         db.session.add(self)
@@ -86,3 +90,10 @@ class Comment(db.Model):
 
     def __repr__(self):
         return f'Comments: {self.comment}'
+
+
+class Quotes:
+    def __init__(self, author, quote):
+        self.id = id
+        self.author = author
+        self.quote = quote
