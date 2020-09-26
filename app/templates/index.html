@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container-fluid text-light" id="home-banner">
 <h1>Welcome to blog website</h1>
 <h2>Trending Quotes</h2>
     <h2>{{ quote.author }}</h2>
     <p>{{ quote.quote }}</p>
+</div>
 {% endblock %}
