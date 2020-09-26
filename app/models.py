@@ -1,19 +1,24 @@
+from datetime import datetime
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from . import login_manager
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
-
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255), index=True)
     email = db.Column(db.String(255), unique=True, index=True)
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     bio = db.Column(db.String(255))
     profile_pic_path = db.Column(db.String())
-    password_secure = db.Column(db.String(255))
+    pass_secure = db.Column(db.String(255))
+    posts = db.relationship('Post', backref='author', lazy=True)
 
     @property
     def password(self):
@@ -26,17 +31,58 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.pass_secure, password)
 
-    @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.get(int(user_id))
+    def __repr__(self):
+        return f'User {self.username}'
 
 
-class Role(db.Model):
-    __tablename__ = 'roles'
+class Post(db.Model):
+    __tablename__ = 'posts'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255))
-    users = db.relationship('User', backref='role', lazy="dynamic")
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+    # post_pic_path = db.Column(db.String())
+    post_title = db.Column(db.String(255), index=True)
+    description = db.Column(db.String(255), index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    def save_post(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_posts(cls, id):
+        posts = Post.query.filter_by(id=id).all()
+        return posts
+
+    @classmethod
+    def get_all_posts(cls):
+        posts = Post.query.order_by('-id').all()
+        return posts
 
     def __repr__(self):
-        return f'User {self.name}'
+        return f'Posts {self.post_title}'
+
+
+class Comment(db.Model):
+    __tablename__ = 'comments'
+
+    id = db.Column(db.Integer, primary_key=True)
+    comment = db.Column(db.Text())
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    def save_comment(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_comments(cls, post_id):
+        comments = Comment.query.filter_by(post_id=post_id).all()
+        return comments
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def __repr__(self):
+        return f'Comments: {self.comment}'

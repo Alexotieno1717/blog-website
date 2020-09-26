@@ -1,8 +1,8 @@
-from flask import render_template, request, redirect, url_for, abort
+from flask import render_template, request, redirect, url_for, abort, flash
 from . import main
-from flask_login import login_required
-from ..models import User
-from .forms import UpdateProfile
+from flask_login import login_required, current_user
+from ..models import User, Post
+from .forms import UpdateProfile, PostForm
 from .. import db, photos
 
 
@@ -51,3 +51,53 @@ def update_pic(uname):
         user.profile_pic_path = path
         db.session.commit()
     return redirect(url_for('main.profile', uname=uname))
+
+
+@main.route('/post/new', methods=['GET', 'POST'])
+@login_required
+def post():
+    """
+    View Post function that returns the Post page and data
+    """
+    post_form = PostForm()
+
+    if post_form.validate_on_submit():
+        post_title = post_form.post_title.data
+        description = post_form.description.data
+        # user = current_user
+
+        new_post = Post(post_title=post_title, description=description, author=current_user)
+        db.session.add(new_post)
+        db.session.commit()
+
+        return redirect(url_for('main.all'))
+
+    title = 'New Post | One Minute Pitch'
+    return render_template('post.html', title=title, post_form=post_form)
+
+
+@main.route('/Post/all', methods=['GET', 'POST'])
+@login_required
+def all():
+    posts = Post.query.all()
+    return render_template('allpost.html', posts=posts)
+
+
+@main.route('/view/<int:id>', methods=['GET', 'POST'])
+@login_required
+def view(id):
+    post = Post.query.get_or_404(id)
+    return render_template('view.html', post=post)
+
+
+@main.route('/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete(id):
+    post = Post.query.get_or_404(id)
+    if post.author != current_user:
+        abort(403)
+    db.session.delete(post)
+    db.session.commit()
+
+    flash('Your post has been deleted')
+    return redirect(url_for('main.all'))

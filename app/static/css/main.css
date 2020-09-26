@@ -1,0 +1,20 @@
+.navbar-custom{
+    box-shadow: 2px 2px 2px;
+}
+.nav-link-custom{
+    color: black;
+}
+.logo-title{
+    font-style: italic;
+}
+.navbar-brand{
+    font-size: 20px;
+}
+.btn-default{
+    background: cornflowerblue !important;
+}
+.profile-img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
