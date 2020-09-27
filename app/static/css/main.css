@@ -54,3 +54,9 @@
     height: 50px;
     padding-top: 10px;
 }
+
+#post-banner{
+    background: darkgrey;
+    height: 70vh;
+    padding-top: 15%;
+}
