@@ -82,7 +82,8 @@ def post():
 @login_required
 def all():
     posts = Post.query.all()
-    return render_template('allpost.html', posts=posts)
+    quote = get_quotes()
+    return render_template('allpost.html', posts=posts, quote=quote)
 
 
 @main.route('/view/<int:id>', methods=['GET', 'POST'])
