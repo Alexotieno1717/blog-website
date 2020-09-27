@@ -2,9 +2,24 @@
 
 {% block content %}
 <div class="container-fluid text-light" id="home-banner">
-<h1>Welcome to blog website</h1>
-<h2>Trending Quotes</h2>
-    <h2>{{ quote.author }}</h2>
-    <p>{{ quote.quote }}</p>
+    <div class="banner-content">
+        <h1>Welcome to blog website</h1>
+        <h5>Sign up, comment on a blog and post a blog</h5>
+    </div>
 </div>
+{#    <div class="container">#}
+{#        <div class="card-body">#}
+{#            <h2>Trending Quotes</h2>#}
+{#            <h2>{{ quote.author }}</h2>#}
+{#            <p>{{ quote.quote }}</p>#}
+{#        </div>#}
+{#    </div>#}
+    <footer class="footer">
+        <div class="social-icons">
+            <i class="fa fa-2x fa-facebook"></i>
+            <i class="fa fa-2x fa-twitter"></i>
+            <i class="fa fa-2x fa-instagram"></i>
+        </div>
+        <p class="pt-2">Copyright &copy; 2020 Design by Alex</p>
+    </footer>
 {% endblock %}
