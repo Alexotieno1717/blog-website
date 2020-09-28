@@ -5,6 +5,8 @@
     <title>Blog website</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Gabriela&family=Kaushan+Script&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
@@ -25,15 +27,14 @@
       <li class="nav-item">
         <a class="nav-link nav-link-custom" href="{{ url_for('main.all') }}">All post</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link nav-link-custom" href="#">Link 3</a>
-      </li>
     </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav navbar-right pr-5">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle nav-link-custom pt-3" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {% if current_user.is_authenticated %}
             {{ current_user.username }}
+        {% else %}
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.login') }}">Sign in</a></li>
         {% endif %}
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">

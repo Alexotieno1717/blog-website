@@ -60,3 +60,34 @@
     height: 70vh;
     padding-top: 15%;
 }
+
+.post-title{
+    font-family: 'Kaushan Script', cursive;
+}
+
+.subtitle{
+    font-family: 'Gabriela', serif;
+}
+
+.post-name{
+    font-family: 'Gabriela', serif;
+    font-style: italic;
+}
+
+.date{
+    font-family: 'Gabriela', serif;
+    font-style: italic;
+}
+
+.quoted-author{
+    font-family: 'Kaushan Script', cursive;
+}
+
+.quoted-quote{
+    font-family: 'Gabriela', serif;
+     font-style: italic;
+}
+
+.card-title > h2{
+    font-family: 'Gabriela', serif;
+}

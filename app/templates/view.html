@@ -7,9 +7,9 @@
         <div class="col-md-2"></div>
         <div class="col-md-8">
             <div class="body-content mt-3">
-                <h4>{{post.title}}</h4>
+                <h4 class="post-title">{{post.post_title}}</h4>
                 <h5 class="subtitle"> {{post.description}}</h5>
-                <h4>{{post.author.username}}</h4>
+                <h5 class="post-name"> posted by ~ {{post.author.username}}</h5>
                 <p class="date text-muted">Posted on ~ {{post.date.strftime('%Y-%m-%d')}}</p>
                 <hr>
                 {% if post.author == current_user %}

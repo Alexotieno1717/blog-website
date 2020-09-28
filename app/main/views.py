@@ -108,7 +108,7 @@ def delete(id):
     db.session.delete(post)
     db.session.commit()
 
-    flash('Your post has been deleted', 'successfully')
+    # flash('Your post has been deleted', 'successfully')
     return redirect(url_for('main.all'))
 
 
@@ -131,12 +131,12 @@ def update_post(id):
     return render_template('update_post.html', form=form)
 
 
-# @main.route('/comment/<int:id>', methods=['GET', 'POST'])
-# @login_required
-# def comment(id):
-#     comment_form = CommentForm()
-#     if comment_form.validate_on_submit():
-#         new_comment = Comment(post_id=id, comment=comment.form.data, author=current_user)
-#         new_comment.save_comment()
-#
-#     return render_template('view.html', comment_form=comment_form)
+@main.route('/comment/<int:id>', methods=['GET', 'POST'])
+@login_required
+def comment(id):
+    comment_form = CommentForm()
+    if comment_form.validate_on_submit():
+        new_comment = Comment(post_id=id, comment=comment.form.data, author=current_user)
+        new_comment.save_comment()
+
+    return render_template('view.html', comment_form=comment_form)

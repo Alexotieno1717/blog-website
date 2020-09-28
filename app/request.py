@@ -1,6 +1,6 @@
 import requests
 
-# getting the movie base url
+# getting the post base url
 base_url = None
 
 
