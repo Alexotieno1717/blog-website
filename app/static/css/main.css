@@ -63,8 +63,17 @@
     font-family: 'Kaushan Script', cursive;
 }
 
+.navbar-brand{
+    font-family: 'Gabriela', serif;
+}
+
 .subtitle{
     font-family: 'Gabriela', serif;
+}
+
+.logo-title{
+    font-family: 'Gabriela', serif;
+    font-style: italic;
 }
 
 .post-name{
